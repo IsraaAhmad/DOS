@@ -1,4 +1,4 @@
-from flask import Flask,jsonify
+from flask import Flask,jsonify,request
 import sqlite3
 
 
@@ -53,8 +53,22 @@ def information_id(id):
     return jsonify({'response': response})
 
 
+#check if the book is excit and update price
+@app.route('/update_price/<int:id>', methods=['Put'])
+def update_price(id):
+    sqlite_query1 = 'select * from catalog where ID='+str(id)
+    rows1 = data_base(sqlite_query1)
+    if len(rows1)== 0:
+        return "the book is not exist"
+    price = request.form.get('price')
+    sqlite_query = 'update catalog set price ='+str(price)+' where ID ='+str(id)
+    rows = data_base(sqlite_query)
+    return "price updated sucsesfully"
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=3500)
+
 
 
