@@ -24,6 +24,8 @@ def information_all():
 def information_id(id):
     response = requests.get("http://192.168.1.30:5000/information/" + str(id))
     return response.content
+
+
 # this req will be used from the internal system by the admin in order to
 #update price of specific book - it will send to catalog server
 @app.route('/update_price/<int:id>', methods=['Put'])
@@ -33,5 +35,20 @@ def update_price(id):
     return response.content
 
 
+# this req will be used from the internal system by the admin in order to
+#increase the amount of specific book in the store
+@app.route('/increase/<int:id>', methods=['Put'])
+def increase(id):
+    amount = request.json['amount']
+    response = requests.put("http://192.168.1.30:5000/increase/" + str(id), {'amount': amount})
+    return response.content
+
+# this req will be used from the internal system by the admin in order to
+#decrese the amount of specific book in the store
+@app.route('/decrease/<int:id>', methods=['Put'])
+def decrease(id):
+    amount = request.json['amount']
+    response = requests.put("http://192.168.1.30:5000/decrease/" + str(id), {'amount': amount})
+    return response.content
 if __name__ == '__main__':
     app.run(debug=True, port=3500)
