@@ -22,9 +22,39 @@ def search(topic):
     topic1 = topic.replace("%20"," ")
     sqlite_query = 'select ID,title from catalog where topic = "' + topic1+'"'
     rows = data_base(sqlite_query)
-    return jsonify({'response': rows})
+    response = []
+    for i in rows:
+        dic = dict (ID = i[0], title = i[1])
+        response.append(dic)
+    return jsonify({'response': response})
+
+
+#return the information of all books
+@app.route('/information/all', methods=['Get'])
+def information_all():
+    sqlite_query = 'select * from catalog'
+    rows = data_base(sqlite_query)
+    response = []
+    for i in rows:
+        dic = dict (ID = i[0], title = i[1],price = i[2],quantity = i[3],topic = i[4])
+        response.append(dic)
+    return jsonify({'response': response})
+
+
+#return the information for specific book according to given id
+@app.route('/information/<int:id>', methods=['Get'])
+def information_id(id):
+    sqlite_query = 'select * from catalog where ID='+str(id)
+    rows = data_base(sqlite_query)
+    response = []
+    for i in rows:
+        dic = dict (ID = i[0], title = i[1],price = i[2],quantity = i[3],topic = i[4])
+        response.append(dic)
+    return jsonify({'response': response})
+
 
 
 if __name__ == '__main__':
     app.run(debug=True, port=3500)
+
 
