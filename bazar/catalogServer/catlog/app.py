@@ -86,14 +86,19 @@ def decrease(id):
     sqlite_query1 = 'select price from catalog where ID='+str(id)
     rows1 = data_base(sqlite_query1)
     if len(rows1)== 0:
-        return "the book is not exist"
-    amount = request.form.get('amount')
-    new_price = rows1[0][0] -int(amount)
-    if new_price < 0 :
-        return "thier in no enough quantity"
-    sqlite_query = 'update catalog set price ='+str(new_price)+' where ID ='+str(id)
-    rows = data_base(sqlite_query)
-    return "decreased quantity  sucsesfully"
+        dic = dict(status = "the book is not exist")
+    else:
+        amount = request.form.get('amount')
+        new_price = rows1[0][0] -int(amount)
+        if new_price < 0 :
+            dic = dict(status = "thier in no enough quantity")
+        else:
+            sqlite_query = 'update catalog set price ='+str(new_price)+' where ID ='+str(id)
+            rows = data_base(sqlite_query)
+            dic = dict (status = "decreased quantity sucsesfully")
+    response = []
+    response.append(dic)
+    return jsonify({'response': response})
 
 
 
