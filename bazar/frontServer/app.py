@@ -50,5 +50,14 @@ def decrease(id):
     amount = request.json['amount']
     response = requests.put("http://192.168.1.30:5000/decrease/" + str(id), {'amount': amount})
     return response.content
+
+#this req will be sent to order server in order to purchase a number of specific
+# book
+@app.route('/purchase/<int:id>', methods=['Post'])
+def purchase(id):
+    amount = request.json['amount']
+    response = requests.post("http://192.168.1.20:5000/purchase/" + str(id), {'amount': amount})
+    return response.content
+
 if __name__ == '__main__':
     app.run(debug=True, port=3500)
